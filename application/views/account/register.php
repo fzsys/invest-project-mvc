@@ -15,16 +15,16 @@
                         <input type="text" class="form-control" name="login">
                     </div>
                 </div>
-                <?php //if (isset($this->route['ref'])): ?>
+                <?php if (isset($this->route['ref'])): ?>
                     <div class="control-group form-group">
                         <div class="controls">
                             <label>Invited by:</label>
-                            <input type="text" class="form-control" name="ref" value="<?php //echo $this->route['ref']; ?>" readonly>
+                            <input type="text" class="form-control" name="ref" value="<?php echo $this->route['ref']; ?>" readonly>
                         </div>
                     </div>
-                <?php //else: ?>
+                <?php else: ?>
                     <input type="hidden" class="form-control" name="ref" value="none">
-                <?php //endif; ?>
+                <?php endif; ?>
                 <div class="control-group form-group">
                     <div class="controls">
                         <label>Wallet number:</label>

@@ -33,9 +33,9 @@ abstract class Controller
         $this->access = require 'application/access/' . $this->route['controller'] . '.php';
         if ($this->isAccess(('all'))) {
             return true;
-        } else if (isset($_SESSION['authorized']['id']) and $this->isAccess('authorized')) {
+        } else if (isset($_SESSION['account']['id']) and $this->isAccess('authorized')) {
             return true;
-        } else if (!isset($_SESSION['authorized']['id']) and $this->isAccess(('guest'))) {
+        } else if (!isset($_SESSION['account']['id']) and $this->isAccess(('guest'))) {
             return true;
         } else if (isset($_SESSION['admin']) and $this->isAccess(('admin'))) {
             return true;

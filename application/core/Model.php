@@ -11,6 +11,6 @@ abstract class Model
 
     public function __construct()
     {
-        //$this->db = new Db();
+        $this->db = new Db();
     }
 }

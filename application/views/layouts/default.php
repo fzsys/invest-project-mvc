@@ -20,9 +20,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-                        <?php //if (isset($_SESSION['account']['id'])): ?>
+                        <?php if (isset($_SESSION['account']['id'])): ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="/dashboard/tariffs">investment</a>
+                                <a class="nav-link" href="/dashboard/tariffs">Investment</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/dashboard/referrals">Referrals</a>
@@ -36,14 +36,14 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/account/logout">Logout</a>
                             </li>
-                        <?php //else: ?>
+                        <?php else: ?>
                             <li class="nav-item">
                                 <a class="nav-link" href="/account/register">Registration</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/account/login">Login</a>
                             </li>
-                        <?php ?>
+                        <?php endif;?>
                     </ul>
                 </div>
             </div>
