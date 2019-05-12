@@ -12,6 +12,7 @@ return [
         'register',
         'recovery',
         'confirm',
+        'reset',
     ],
     'admin' => [
         //

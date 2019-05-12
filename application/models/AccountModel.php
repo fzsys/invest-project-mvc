@@ -23,7 +23,7 @@ class AccountModel extends Model
                 'message' => 'referral login is incorrect',
             ],
             'password' => [
-                'pattern' => '#^[a-z0-9]{3,20}$#',
+                'pattern' => '#^[a-z0-9]{3,30}$#',
                 'message' => 'password is incorrect',
             ],
             'wallet' => [
@@ -33,14 +33,14 @@ class AccountModel extends Model
         ];
 
         foreach ($input as $val) {
-            if(!isset($post[$val]) or !preg_match($rules[$val]['pattern'], $post[$val])) {
+            if (!isset($post[$val]) or !preg_match($rules[$val]['pattern'], $post[$val])) {
                 $this->error = $rules[$val]['message'];
                 return false;
             }
         }
 
-        if(isset($_POST['ref'])) {
-            if($post['login'] == $post['ref']) {
+        if (isset($_POST['ref'])) {
+            if ($post['login'] == $post['ref']) {
                 $this->error = 'referral is wrong';
                 return false;
             }
@@ -49,16 +49,12 @@ class AccountModel extends Model
         return true;
     }
 
-    public function emailExists($email)
+    public function getIdByEmail($email)
     {
         $params = [
             'email' => $email,
         ];
-        if($this->db->col('SELECT id FROM accounts WHERE email = :email', $params)){
-            $this->error = 'this email already exists';
-            return false;
-        }
-        return true;
+        return $this->db->col('SELECT id FROM accounts WHERE email = :email', $params);
     }
 
     public function loginExists($login)
@@ -66,12 +62,13 @@ class AccountModel extends Model
         $params = [
             'login' => $login,
         ];
-        if($this->db->col('SELECT id FROM accounts WHERE login = :login', $params)){
+        if ($this->db->col('SELECT id FROM accounts WHERE login = :login', $params)) {
             $this->error = 'this login already exists';
             return false;
         }
         return true;
     }
+
     public function tokenExists($token)
     {
         $params = [
@@ -79,6 +76,7 @@ class AccountModel extends Model
         ];
         return $this->db->col('SELECT id FROM accounts WHERE token = :token', $params);
     }
+
     public function refExists($ref)
     {
         $params = [
@@ -96,11 +94,11 @@ class AccountModel extends Model
     {
         $token = $this->createToken();
 
-        if($post['ref'] == 'none') {
+        if ($post['ref'] == 'none') {
             $ref = 0;
         } else {
             $ref = $this->refExists($post['ref']);
-            if(!$ref) {
+            if (!$ref) {
                 $ref = 0;
             }
         }
@@ -116,10 +114,12 @@ class AccountModel extends Model
             'status' => 0,
         ];
 
-        $this->db->query('INSERT INTO accounts VALUES (:id, :email, :login, :wallet, :password, :ref, :token, :status)', $params);
-        $id = $this->db->getLastInsertId();
+        $this->db->query('INSERT INTO accounts VALUES (:id, :email, :login, :wallet, :password, :ref, :token, :status)',
+            $params);
+        //$id = $this->db->getLastInsertId();
         //mail($post['email'], 'Register', 'Confirm registration: WEBSITE URL/account/confirm/' . $token);
-        file_put_contents('test/' . $id . '.txt', 'Confirm registration: WEBSITE http://invest-proj-mvc/account/confirm/' . $token);
+        file_put_contents('test/reg-test.txt',
+            'Confirm registration: WEBSITE http://invest-proj-mvc/account/confirm/' . $token . "\r\n", FILE_APPEND);
 
     }
 
@@ -139,7 +139,7 @@ class AccountModel extends Model
         ];
 
         $hash = $this->db->col('SELECT password FROM accounts WHERE login = :login', $params);
-        if(!$hash or !password_verify($password, $hash)) {
+        if (!$hash or !password_verify($password, $hash)) {
             return false;
         }
         return true;
@@ -152,7 +152,7 @@ class AccountModel extends Model
         ];
 
         $status = $this->db->col('SELECT status FROM accounts WHERE ' . $type . ' = :' . $type, $params);
-        if($status != 1) {
+        if ($status != 1) {
             $this->error = 'account wasn\'t confirmed via email';
             return false;
         }
@@ -169,4 +169,51 @@ class AccountModel extends Model
         $_SESSION['account'] = $data[0];
     }
 
+    public function recovery($post)
+    {
+        $token = $this->createToken();
+
+        $params = [
+            'email' => $post['email'],
+            'token' => $token,
+        ];
+
+        $this->db->query('UPDATE accounts SET token = :token WHERE email = :email', $params);
+
+
+        //$id = $this->db->getLastInsertId();
+        //mail($post['email'], 'Register', 'Confirm registration: WEBSITE URL/account/confirm/' . $token);
+        file_put_contents('test/recovery-test.txt',
+            'Password recovery: WEBSITE http://invest-proj-mvc/account/reset/' . $token . "\r\n", FILE_APPEND);
+    }
+
+    public function reset($token)
+    {
+        $newPassword = $this->createToken();
+        $params = [
+            'token' => $token,
+            'password' => password_hash($newPassword, PASSWORD_BCRYPT),
+        ];
+        $this->db->query('UPDATE accounts SET token = "", password = :password WHERE token = :token', $params);
+        return $newPassword;
+    }
+
+    public function save($post)
+    {
+        $params = [
+            'id' => $_SESSION['account']['id'],
+            'email' => $post['email'],
+            'wallet' => $post['wallet'],
+        ];
+        if (!empty($post['password'])) {
+            $params['password'] = password_hash($post['password'], PASSWORD_BCRYPT);
+            $sql = ',password = :password';
+        } else {
+            $sql = '';
+        }
+        foreach ($params as $key => $val) {
+            $_SESSION['account'][$key] = $val;
+        }
+        $this->db->query('UPDATE accounts SET email = :email, wallet = :wallet' . $sql . ' WHERE id = :id', $params);
+    }
 }

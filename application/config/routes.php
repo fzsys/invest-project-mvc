@@ -33,6 +33,11 @@ return [
         'action' => 'confirm',
     ],
 
+    'account/reset/{token:\w+}' => [
+        'controller' => 'account',
+        'action' => 'reset',
+    ],
+
     'account/profile' => [
         'controller' => 'account',
         'action' => 'profile',
