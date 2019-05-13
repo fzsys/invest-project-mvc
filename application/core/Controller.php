@@ -8,6 +8,7 @@ abstract class Controller
     public $view;
     public $model;
     public $access;
+    public $tariffs;
 
     public function __construct($route)
     {
@@ -18,6 +19,7 @@ abstract class Controller
         };
         $this->view = new View($route);
         $this->model = $this->loadModel($route['controller']);
+        $this->tariffs = require 'application/config/tariffs.php';
     }
 
     public function loadModel($name)

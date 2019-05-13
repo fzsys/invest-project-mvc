@@ -48,4 +48,30 @@ return [
         'action' => 'logout',
     ],
 
+    //DashboardController
+    'dashboard/tariffs' => [
+        'controller' => 'dashboard',
+        'action' => 'tariffs',
+    ],
+
+    'dashboard/invest/{id:\d+}' => [
+        'controller' => 'dashboard',
+        'action' => 'invest',
+    ],
+
+    'dashboard/history' => [
+        'controller' => 'dashboard',
+        'action' => 'history',
+    ],
+
+    'dashboard/referrals' => [
+        'controller' => 'dashboard',
+        'action' => 'referrals',
+    ],
+
+    //MerchantController
+    'merchant/perfectMoney' => [
+        'controller' => 'merchant',
+        'action' => 'perfectMoney',
+    ],
 ];

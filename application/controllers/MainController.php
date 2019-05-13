@@ -8,7 +8,10 @@ class MainController extends Controller
 {
     public function indexAction()
     {
-        $this->view->render('Main page');
+        $vars = [
+            'tariffs' => $this->tariffs,
+        ];
+        $this->view->render('Main page', $vars);
 
     }
 
