@@ -27,7 +27,7 @@
                         <input type="number" min="<?php echo $tariffs['min']; ?>" max="<?php echo $tariffs['max']; ?>" class="form-control" value="<?php echo $tariffs['min']; ?>" name="PAYMENT_AMOUNT">
                     </div>
                 </div>
-                <input type="hidden" name="PAYEE_ACCOUNT" class="form-control" value="<?php echo $_SESSION['account']['wallet']; ?>" disabled>
+                <input type="hidden" name="PAYEE_ACCOUNT" class="form-control" value="" disabled> <!-- IMPORTANT!!!!!! THERE SHOULD BE YOUR WALLET NUMBER!!!!!!! -->
                 <input type="hidden" name="PAYEE_NAME" value="Tariff payment # <?php echo $this->route['id']; ?>">
 				<input type="hidden" name="PAYMENT_UNITS" value="USD">
 				<input type="hidden" name="PAYMENT_ID" value="<?php echo $this->route['id'].'-'.$_SESSION['account']['id']; ?>">

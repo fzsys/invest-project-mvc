@@ -110,11 +110,12 @@ class AccountModel extends Model
             'wallet' => $post['wallet'],
             'password' => password_hash($post['password'], PASSWORD_BCRYPT),
             'ref' => $ref,
+            'refBalance' => 0,
             'token' => $token,
             'status' => 0,
         ];
 
-        $this->db->query('INSERT INTO accounts VALUES (:id, :email, :login, :wallet, :password, :ref, :token, :status)',
+        $this->db->query('INSERT INTO accounts VALUES (:id, :email, :login, :wallet, :password, :ref, :refBalance, :token, :status)',
             $params);
         //$id = $this->db->getLastInsertId();
         //mail($post['email'], 'Register', 'Confirm registration: WEBSITE URL/account/confirm/' . $token);

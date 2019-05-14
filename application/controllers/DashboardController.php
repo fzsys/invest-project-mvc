@@ -3,6 +3,7 @@
 namespace application\controllers;
 
 use application\core\Controller;
+use application\lib\Pagination;
 
 class DashboardController extends Controller
 {
@@ -15,15 +16,23 @@ class DashboardController extends Controller
         $this->view->render('Invest page', $vars);
     }
 
+    public function historyAction()
+    {
+        $pagination = new Pagination($this->route, $this->model->historyCount(), 5);
+        $vars = [
+            'pagination' => $pagination->get(),
+            'list' => $this->model->historyList($this->route),
+        ];
+
+        $this->view->render('History page', $vars);
+    }
+
     public function tariffsAction()
     {
         $this->view->render('Tariffs page');
     }
 
-    public function historyAction()
-    {
-        $this->view->render('History page');
-    }
+
 
     public function referralsAction()
     {

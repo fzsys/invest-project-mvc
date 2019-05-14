@@ -10,13 +10,13 @@ class MerchantModel extends Model
     {
 
         $params =
-            $post['PAYMENT_ID'].':'.
-            $post['PAYEE_ACCOUNT'].':'.
-            $post['PAYMENT_AMOUNT'].':'.
-            $post['PAYMENT_UNITS'].':'.
-            $post['PAYMENT_BATCH_NUM'].':'.
-            $post['PAYER_ACCOUNT'].':'.
-            strtoupper(md5('secret')).':'.
+            $post['PAYMENT_ID'] . ':' .
+            $post['PAYEE_ACCOUNT'] . ':' .
+            $post['PAYMENT_AMOUNT'] . ':' .
+            $post['PAYMENT_UNITS'] . ':' .
+            $post['PAYMENT_BATCH_NUM'] . ':' .
+            $post['PAYER_ACCOUNT'] . ':' .
+            strtoupper(md5('secret')) . ':' .  // IMPORTANT!!!!!!!!!!!!!!!!!!!! CHANGE SECRET BEFORE USING IN PROD!!!!!!!!!!!!!!!!!
             $post['TIMESTAMPGMT'];
 
         list($tid, $uid) = explode('-', $post['PAYMENT_ID']);
@@ -30,11 +30,9 @@ class MerchantModel extends Model
         //}
         if ($post['PAYMENT_UNITS'] != 'USD') {
             return false;
-        }
-        elseif (!isset($tariff[$tid])) {
+        } elseif (!isset($tariff[$tid])) {
             return false;
-        }
-        elseif ($amount > $tariff[$tid]['max'] or $amount < $tariff[$tid]['min']) {
+        } elseif ($amount > $tariff[$tid]['max'] or $amount < $tariff[$tid]['min']) {
             return false;
         }
 
@@ -47,10 +45,35 @@ class MerchantModel extends Model
 
     public function createTariff($data, $tariff)
     {
-        if(!$this->db->col('SELECT id FROM accounts WHERE id = :id', ['id' => $data['uid']])) {
-            $this->error = 'user ID not found';
+        //check user exists through ref field (if field id user exists - ref field exists) and get ref ID (if exists)
+        $dataRef = $this->db->col('SELECT ref FROM accounts WHERE id = :id', ['id' => $data['uid']]);
+
+        if ($dataRef == false) {
+
             return false;
         }
+
+        //referral bonus
+        if ($dataRef != 0) {
+            $refBonus = round((($data['amount'] * 5) / 100), 2);
+            $params = [
+                'id' => $dataRef,
+                'sum' => $refBonus,
+            ];
+
+            $this->db->query('UPDATE accounts SET refBalance = refBalance + :sum WHERE id = :id', $params);
+        }
+
+        //add data to history
+        $params = [
+            'id' => null,
+            'uid' => $dataRef,
+            'unixTime' => time(),
+            'description' => 'Referral bonus, amount: ' . $refBonus . ' $',
+        ];
+        $this->db->query('INSERT INTO history VALUES (:id, :uid, :unixTime, :description)', $params);
+
+        //write tariff data into data base
         $params = [
             'id' => null,
             'uid' => $data['uid'],
@@ -61,7 +84,16 @@ class MerchantModel extends Model
             'unixTimeFinish' => strtotime('+' . $tariff['hour'] . 'hours'),
         ];
         $this->db->query('INSERT INTO tariffs VALUES (:id, :uid, :sumIn, :sumOut, :percent, :unixTimeStart, :unixTimeFinish)', $params);
-        debug($params);
+
+        //add data to history
+        $params = [
+            'id' => null,
+            'uid' => $data['uid'],
+            'unixTime' => time(),
+            'description' => 'Investment, deposit # ' . $this->db->getLastInsertId(),
+        ];
+        $this->db->query('INSERT INTO history VALUES (:id, :uid, :unixTime, :description)', $params);
     }
+
 
 }

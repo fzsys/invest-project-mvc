@@ -64,6 +64,11 @@ return [
         'action' => 'history',
     ],
 
+    'dashboard/history/{page:\d+}' => [
+        'controller' => 'dashboard',
+        'action' => 'history',
+    ],
+
     'dashboard/referrals' => [
         'controller' => 'dashboard',
         'action' => 'referrals',
