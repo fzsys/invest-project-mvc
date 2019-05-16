@@ -6,20 +6,20 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <?php //if (empty($list)): ?>
-                            <p>Список инвестиций пуст</p>
+                            <p>Investment list is empty</p>
                         <?php //else: ?>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Номер вклада</th>
-                                        <th>Дата старта</th>
-                                        <th>Дата завершения</th>
-                                        <th>Сумма</th>
-                                        <th>Получаете</th>
-                                        <th>Процент</th>
-                                        <th>Логин</th>
+                                        <th>Deposit number</th>
+                                        <th>Start date</th>
+                                        <th>Finish date</th>
+                                        <th>Value</th>
+                                        <th>For withdrawal</th>
+                                        <th>Percent</th>
+                                        <th>Login</th>
                                         <th>E-mail</th>
-                                        <th>Статус</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -36,12 +36,12 @@
                                             <td>
                                                 <?php //if (time() >= $val['unixTimeFinish']): ?>
                                                     <?php //if ($val['sumOut']): ?>
-                                                        Ожидает выплаты
+                                                        Wait for ithdrawal
                                                     <?php //else: ?>
-                                                        Закрыт
+                                                        Closed
                                                     <?php //endif; ?>
                                                 <?php //else: ?>
-                                                    Активна
+                                                    Active
                                                 <?php //endif; ?>
                                             </td>
                                         </tr>

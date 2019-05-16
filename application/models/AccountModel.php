@@ -118,7 +118,7 @@ class AccountModel extends Model
         $this->db->query('INSERT INTO accounts VALUES (:id, :email, :login, :wallet, :password, :ref, :refBalance, :token, :status)',
             $params);
         //$id = $this->db->getLastInsertId();
-        //mail($post['email'], 'Register', 'Confirm registration: WEBSITE URL/account/confirm/' . $token);
+        //mail($post['email'], 'Register', 'Confirm registration:' . $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'] . '/account/confirm/' . $token);
         file_put_contents('test/reg-test.txt',
             'Confirm registration: WEBSITE http://invest-proj-mvc/account/confirm/' . $token . "\r\n", FILE_APPEND);
 
@@ -183,7 +183,7 @@ class AccountModel extends Model
 
 
         //$id = $this->db->getLastInsertId();
-        //mail($post['email'], 'Register', 'Confirm registration: WEBSITE URL/account/confirm/' . $token);
+        //mail($post['email'], 'Register', 'Confirm registration:' . $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'] . '/account/confirm/' . $token);
         file_put_contents('test/recovery-test.txt',
             'Password recovery: WEBSITE http://invest-proj-mvc/account/reset/' . $token . "\r\n", FILE_APPEND);
     }

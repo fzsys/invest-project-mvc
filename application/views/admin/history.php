@@ -5,31 +5,31 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <?php //if (empty($list)): ?>
-                            <p>История пуста</p>
-                        <?php //else: ?>
+                        <?php if (empty($list)): ?>
+                            <p>History is empty</p>
+                        <?php else: ?>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Дата</th>
-                                        <th>Логин</th>
+                                        <th>Date</th>
+                                        <th>Login</th>
                                         <th>E-mail</th>
-                                        <th>Описание</th>
+                                        <th>Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php //foreach ($list as $val): ?>
+                                    <?php foreach ($list as $val): ?>
                                         <tr>
-                                            <td><?php //echo date('d.m.Y в H:i', $val['unixTime']); ?></td>
-                                            <td><?php //echo $val['login']; ?></td>
-                                            <td><?php //echo $val['email']; ?></td>
-                                            <td><?php //echo $val['description']; ?></td>
+                                            <td><?php echo date('d.m.Y в H:i', $val['unixTime']); ?></td>
+                                            <td><?php echo $val['login']; ?></td>
+                                            <td><?php echo $val['email']; ?></td>
+                                            <td><?php echo $val['description']; ?></td>
                                         </tr>
-                                    <?php //endforeach; ?>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
-                            <?php //echo $pagination; ?>
-                        <?php //endif; ?>
+                            <?php echo $pagination; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

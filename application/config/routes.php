@@ -54,6 +54,11 @@ return [
         'action' => 'tariffs',
     ],
 
+    'dashboard/tariffs/{page:\d+}' => [
+        'controller' => 'dashboard',
+        'action' => 'tariffs',
+    ],
+
     'dashboard/invest/{id:\d+}' => [
         'controller' => 'dashboard',
         'action' => 'invest',
@@ -74,9 +79,56 @@ return [
         'action' => 'referrals',
     ],
 
+    'dashboard/referrals/{page:\d+}' => [
+        'controller' => 'dashboard',
+        'action' => 'referrals',
+    ],
+
     //MerchantController
     'merchant/perfectMoney' => [
         'controller' => 'merchant',
         'action' => 'perfectMoney',
     ],
+
+    //AdminController
+    'admin/login' => [
+        'controller' => 'admin',
+        'action' => 'login',
+    ],
+
+    'admin/logout' => [
+        'controller' => 'admin',
+        'action' => 'logout',
+    ],
+
+    'admin/history' => [
+        'controller' => 'admin',
+        'action' => 'history',
+    ],
+
+    'admin/history/{page:\d+}' => [
+        'controller' => 'admin',
+        'action' => 'history',
+    ],
+
+    'admin/tariffs' => [
+        'controller' => 'admin',
+        'action' => 'tariffs',
+    ],
+
+    'admin/tariffs/{page:\d+}' => [
+        'controller' => 'admin',
+        'action' => 'tariffs',
+    ],
+
+    'admin/withdrawal' => [
+        'controller' => 'admin',
+        'action' => 'withdrawal',
+    ],
+
+    'admin/withdrawal/{page:\d+}' => [
+        'controller' => 'admin',
+        'action' => 'withdrawal',
+    ],
+
 ];
