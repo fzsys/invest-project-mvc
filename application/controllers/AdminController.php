@@ -43,12 +43,34 @@ class AdminController extends Controller
 
     public function withdrawalAction()
     {
-        $this->view->render('Withdrawals');
+        if (!empty($_POST)) {
+            if ($_POST['type'] == 'ref') {
+                $result = $this->model->withdrawRefComplete($_POST['id']);
+                if ($result) {
+                    $this->view->location('admin/withdrawal');
+                } else {
+                    $this->view->message('error', 'request error');
+                }
+
+            } elseif ($_POST['type'] == 'invest') {
+                $result = $this->model->withdrawTariffComplete($_POST['id']);
+                if ($result) {
+                    $this->view->location('admin/withdrawal');
+                } else {
+                    $this->view->message('error', 'request error');
+                }
+            }
+        }
+        $vars = [
+            'listRef' => $this->model->withdrawRefList(),
+            'listTariffs' => $this->model->withdrawTariffsList(),
+        ];
+        $this->view->render('Withdrawals', $vars);
     }
 
     public function historyAction()
     {
-        $pagination = new Pagination($this->route, $this->model->historyCount(), 5);
+        $pagination = new Pagination($this->route, $this->model->historyCount(), 10);
         $vars = [
             'pagination' => $pagination->get(),
             'list' => $this->model->historyList($this->route),
@@ -59,7 +81,13 @@ class AdminController extends Controller
 
     public function tariffsAction()
     {
-        $this->view->render('Tariffs');
+        $pagination = new Pagination($this->route, $this->model->investCount(), 10);
+        $vars = [
+            'pagination' => $pagination->get(),
+            'list' => $this->model->investList($this->route),
+        ];
+
+        $this->view->render('Tariffs', $vars);
     }
 
 
